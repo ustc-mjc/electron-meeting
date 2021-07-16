@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+      "module": "commonjs", //用commonjs模块，不用AMD、CMD、es6标准模块
+      "target": "es5", ////翻译成es5
+      "sourceMap": true, //方便调试js时映射到ts
+      "esModuleInterop": true, //可以直接import xx from 'xx, 不用import * as xx from 'xx'
+      "lib": [ //依赖的库
+        "dom",
+        "es5",
+        "scripthost",
+        "es2015.collection"
+      ]
+    },
+    "exclude": [
+      "node_modules"
+    ]
+  }
+  
