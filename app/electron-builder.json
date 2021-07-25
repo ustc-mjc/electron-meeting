@@ -1,0 +1,58 @@
+{
+    "appId": "org.mjc.meeting",
+    "productName": "Electron Meeting",
+    "copyright": "Copyright © 2021 ustc-mjc",
+    "directories": {
+        "app": ".",
+        "output": "out",
+        "buildResources": "build-res"
+    },
+    "files": [
+        "package.json",
+        "build/**/*",
+        "node_modules"
+    ],
+    "dmg": {
+        "background": null,
+        "backgroundColor": "#ffffff",
+        "window": {
+            "width": "400",
+            "height": "300"
+        },
+        "contents": [
+            {
+                "x": 100,
+                "y": 100
+            },
+            {
+                "x": 300,
+                "y": 100,
+                "type": "link",
+                "path": "/Applications"
+            }
+        ]
+    },
+    "mac": {
+        "target": "dmg",
+        "category": "public.app-category.video",
+        "entitlements": "entitlements.mac.plist",
+        "hardenedRuntime": true,
+        "extendInfo": {
+            "NSMicrophoneUsageDescription": "请允许本程序访问您的麦克风",
+            "NSCameraUsageDescription": "请允许本程序访问您的摄像头"
+        }
+    },
+    "win": {
+        "target": "nsis"
+    },
+    "linux": {
+        "target": "AppImage",
+        "category": "AudioVideo"
+    },
+    "publish": {
+        "provider": "github",
+        "owner": "ustc-mjc",
+        "repo": "electron-meeting",
+        "releaseType": "release"
+    }
+}

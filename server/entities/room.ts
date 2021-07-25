@@ -38,10 +38,14 @@ export default class Room {
             const participant = {
                 name: peer.name,
                 id: peer.id,
-                producers: {}
+                producers: []
             };
             peer.producers.forEach(producer => {
-                participant.producers[producer.kind] = producer.id;
+                participant.producers.push({
+                    producer_id: producer.id,
+                    producer_kind: producer.kind,
+                    appData: producer.appData
+                })
             });
             producers.push(participant);
         });
@@ -81,37 +85,42 @@ export default class Room {
         await peer.connectTransport(transportId, dtlsParameters);
     }
 
-    async produce(socketId: string, producerTransportId: string, rtpParameters: RtpParameters, kind: MediaKind) {
-        const producer = await this.peers.get(socketId).createProducer(producerTransportId, rtpParameters, kind);
-
+    async produce(socketId: string, producerTransportId: string, rtpParameters: RtpParameters, kind: MediaKind, appData: Object) {
+        const producer = await this.peers.get(socketId).createProducer(producerTransportId, rtpParameters, kind, appData);
+        console.log(`用户${socketId}要创建producer ${producer.id}，向房间${this.id}中广播新的produce事件`);
         this.broadCast(socketId, signals.NEW_PRODUCER, {
             producer_id: producer.id,
-            socket_id: socketId
+            appData: producer.appData,
+            socket_id: socketId,
+
         })
         return producer.id;
     }
 
-    async consume(socketId: string, consumerTransportId: string, producerId: string, rtpCapabilities: RtpCapabilities) {
+    async consume(socketId: string, consumerTransportId: string, producerId: string, appData: Object, rtpCapabilities: RtpCapabilities) {
         if (!this.router.canConsume({ producerId: producerId, rtpCapabilities })) return;
-        const { consumer, params } = await this.peers.get(socketId).createConsumer(consumerTransportId, producerId, rtpCapabilities);
+        const { consumer, params } = await this.peers.get(socketId).createConsumer(consumerTransportId, producerId, appData, rtpCapabilities);
 
         consumer.on('producerclose', () => {
+            console.log(`用户${socketId}的consumer ${consumer.id}监听到producerclose事件,向房间${this.id}中广播关闭consumer${consumer.id}事件`);
             this.peers.get(socketId).removeConsumer(consumer.id);
-            this.io.to(socketId).emit(signals.CLOSE_CONSUMER, {
-                consumer_id: consumer.id
-            });
+            // this.io.to(socketId).emit(signals.CLOSE_CONSUMER, {
+            //     consumer_id: consumer.id
+            // });
         });
 
         consumer.on('producerpause', () => {
-            this.io.to(socketId).emit(signals.PAUSE_CONSUMER, {
-                consumer_id: consumer.id
-            });
+            console.log(`用户${socketId}的consumer ${consumer.id}监听到producerpause事件,向房间${this.id}中广播暂停consumer${consumer.id}事件`);
+            // this.io.to(socketId).emit(signals.PAUSE_CONSUMER, {
+            //     consumer_id: consumer.id
+            // });
         });
 
         consumer.on('producerresume', () => {
-            this.io.to(socketId).emit(signals.RESUME_CONSUMER, {
-                consumer_id: consumer.id
-            });
+            console.log(`用户${socketId}的consumer ${consumer.id}监听到producerresume事件,向房间${this.id}中恢复consumer${consumer.id}事件`);
+            // this.io.to(socketId).emit(signals.RESUME_CONSUMER, {
+            //     consumer_id: consumer.id
+            // });
         });
 
         return params;

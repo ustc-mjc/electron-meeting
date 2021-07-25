@@ -1,5 +1,43 @@
-# server node_modules
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# server gitignore
 server/node_modules
 
 *.js
 *.js.map
+
+!/server/config/*
+!/server/config/ssl/*
+
+# app gitignore
+
+# dependencies
+app/node_modules
+.pnp
+.pnp.js
+
+# testing
+app/coverage
+
+# production
+app/build
+
+# misc
+app/.DS_Store
+app/.env.local
+app/.env.development.local
+app/.env.test.local
+app/.env.production.local
+
+app/npm-debug.log*
+app/yarn-debug.log*
+app/yarn-error.log*
+
+# ts to js
+app/*.js
+
+# build-res
+app/build-res
+
+# out
+app/out

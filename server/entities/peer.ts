@@ -28,32 +28,37 @@ export default class Peer {
         await transport.connect({ dtlsParameters: dtlsParameters });
     }
 
-    async createProducer(producerTransportId: string, rtpParameters: RtpParameters, kind: MediaKind) {
+    async createProducer(producerTransportId: string, rtpParameters: RtpParameters, kind: MediaKind, appData: Object) {
+        console.log(`调用Peer中的创建Producer函数，appData为 ${appData}`);
         const producer = await this.transports.get(producerTransportId).produce({
             kind: kind,
-            rtpParameters: rtpParameters
+            rtpParameters: rtpParameters,
+            appData: appData
         });
+        console.log(producer.appData);
         this.producers.set(producer.id, producer);
         producer.on('transportclose', () => {
+            console.log(`用户${this.id}:${this.name}的producer收到transportclose事件,开始关闭producer${producer.id}`);
             producer.close();
             this.producers.delete(producer.id);
         });
         return producer;
     }
 
-    async createConsumer(consumerTransportId: string, producerId: string, rtpCapabilities: RtpCapabilities) {
+    async createConsumer(consumerTransportId: string, producerId: string, appData: Object, rtpCapabilities: RtpCapabilities) {
         const consumerTransport = this.transports.get(consumerTransportId);
         const consumer = await consumerTransport.consume({
             producerId: producerId,
-            rtpCapabilities: rtpCapabilities
+            rtpCapabilities: rtpCapabilities,
+            appData: appData
         });
         this.consumers.set(consumer.id, consumer);
 
         consumer.on('transportclose', () => {
+            console.log(`用户${this.id}:${this.name}的consumer收到transportclose事件,开始关闭consumer${consumer.id}`);
             consumer.close();
             this.consumers.delete(consumer.id);
         });
-
         return {
             consumer,
             params: {
@@ -62,7 +67,8 @@ export default class Peer {
                 kind: consumer.kind,
                 rtpParameters: consumer.rtpParameters,
                 type: consumer.type,
-                producerPaused: consumer.producerPaused
+                producerPaused: consumer.producerPaused,
+                appData: consumer.appData
             }
         };
     }

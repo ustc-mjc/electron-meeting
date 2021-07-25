@@ -1,0 +1,79 @@
+{
+  "name": "meeting",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/main.js",
+  "license": "MIT",
+  "homepage": "./",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ustc-mjc/electron-meeting.git"
+  },
+  "author": {
+    "name": "ustc-mjc",
+    "email": "mojucheng@bytedance.com"
+  },
+  "bugs": {
+    "url": "https://github.com/ustc-mjc/electron-meeting/issues"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.5.1",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "@types/jest": "^24.0.0",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.0",
+    "@types/react-dom": "^16.9.0",
+    "@types/react-redux": "^7.1.7",
+    "mediasoup-client": "^3.6.36",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.3",
+    "socket.io-client": "^4.1.3",
+    "typescript": "~4.1.5",
+    "web-vitals": "^2.1.0"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject",
+    "build-main": "tsc src/main.ts && tsc public/electron.ts",
+    "build-icon": "electron-icon-builder --input=./public/icon.png --output=build-res --flatten",
+    "run-app": "electron .",
+    "pack": "yarn run build && electron-builder -m",
+    "publish": "electron-builder -mwl --publish always"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@craco/craco": "^6.2.0",
+    "@types/react-router-dom": "^5.1.8",
+    "@types/uuid": "^8.3.1",
+    "@types/webrtc": "^0.0.29",
+    "autoprefixer": "^9",
+    "bowser": "^2.11.0",
+    "electron": "^13.1.7",
+    "electron-builder": "^22.11.7",
+    "electron-icon-builder": "^2.0.1",
+    "is-electron": "^2.2.0",
+    "postcss": "^7",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat"
+  }
+}
