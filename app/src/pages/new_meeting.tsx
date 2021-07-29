@@ -74,7 +74,7 @@ const NewMeeting = () => {
             dispatch(show("Your Name is null"));
             return;
         }
-        if (audio || video) {
+        if (video) {
             //@ts-ignore
             videoRef.current.srcObject.getTracks().forEach(track => {
                 track.stop();

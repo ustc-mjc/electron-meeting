@@ -9,7 +9,8 @@ import {
     setParticipants,
     resumeConsumer,
     pauseConsumer,
-    closeConsumer
+    closeConsumer,
+    newFile
 } from '../slices/meeting';
 import { show } from "../slices/toast";
 
@@ -24,6 +25,9 @@ const emitEventMiddleWare = (socket: Socket) => (store: any) => (next: any) => (
             break;
         case 'meeting/sendMessage':
             socket.emit(signals.SEND_MESSAGE, action.payload.meeting_id, action.payload.message, action.payload.time);
+            break;
+        case 'meeting/shareFile':
+            socket.emit(signals.SHARE_FILE, action.payload);
             break;
         case 'meeting/getParticipants':
             socket.emit(signals.GET_PARTICIPANTS, action.payload.meeting_id, (participants: any[]) => {
@@ -55,13 +59,20 @@ const listeners = [
         callback: (dispatch: Dispatch<any>, message: any) => {
             dispatch(closeConsumer(message));
         }
-    },
-      {
+    },{
         name: signals.NEW_MESSAGE,
         callback: (dispatch: Dispatch<any>, message: any) => {
             dispatch(newMessage(message));
+            dispatch(show('New message!'))
         }
     }, {
+        name: signals.NEW_FILE,
+        callback: (dispatch: Dispatch<any>, message: any) => {
+            dispatch(newFile(message));
+            dispatch(show('New share file!'))
+        }
+    },
+    {
         name: signals.PARTICIPANT_OFFLINE,
         callback: (dispatch: Dispatch<any>, participantId: string) => {
             dispatch(removeParticipant(participantId));

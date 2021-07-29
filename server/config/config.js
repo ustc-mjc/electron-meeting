@@ -5,7 +5,26 @@ module.exports = {
     listenPort: 3333,
     sslCrt: './ssl/cert.pem',
     sslKey: './ssl/key.pem',
-
+    rtcConfig: {
+        iceServers: [
+            // public turn server
+            {
+            urls: [
+                'stun:stun.l.google.com:19302',
+                'stun:global.stun.twilio.com:3478']
+            },
+            //private turn server
+            {
+            urls: [
+                'turn:175.24.188.166:19302?transport=udp'],
+            username: '1627441399:sample',
+            credential: 'pmmHIZZh0lAOvr/Lbl2wBgrdOuE'
+            }
+        ],
+        sdpSemantics: 'unified-plan',
+        bundlePolicy: 'max-bundle',
+        iceCandidatePoolsize: 1
+    },
     mediasoup: {
         // Worker settings
         numWorkers: Object.keys(os.cpus()).length,
@@ -114,8 +133,8 @@ module.exports = {
             {
                 listenIp:
                     {
-                        ip: process.env.MEDIASOUP_LISTEN_IP || '1.2.3.4',
-                        announcedIp: process.env.MEDIASOUP_ANNOUNCED_IP|| '192.168.0.142'
+                        ip: process.env.MEDIASOUP_LISTEN_IP || '0.0.0.0',
+                        announcedIp: process.env.MEDIASOUP_ANNOUNCED_IP|| '127.0.0.1'
                     },
                 maxSctpMessageSize: 262144
             }
