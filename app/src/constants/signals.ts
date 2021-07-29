@@ -5,6 +5,8 @@ export enum signals {
     REQUEST_JOIN = 'meeting:request_join',
     SEND_MESSAGE = 'meeting:send_message',
     NEW_MESSAGE = 'meeting:chat',
+    SHARE_FILE = 'meeting:share_file',
+    NEW_FILE = 'meeting:new_file',
     GET_PARTICIPANTS = 'meeting:participants:get',
     NEW_PARTICIPANT = 'meeting:participants:new',
     PARTICIPANT_OFFLINE = 'meeting:participants:offline',

@@ -1,5 +1,5 @@
 # electron-meeting
-> This project use MediaSoup to implement multiplayer meetings.
+> This project uses MediaSoup to implement multiplayer meetings.
 
 <hr>
 
@@ -39,5 +39,5 @@
 
 ## in the future, what need to do
 1. add register and login function
-2. add file upload and download function
+2. add file upload and download function, -- finished!
 3. add media setting function

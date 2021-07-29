@@ -33,6 +33,7 @@ export const meetingSlice = createSlice({
             screenEnabled: false
         };
         state.messages = [];
+        state.sharedFiles = [];
         state.status = MeetingStatus.NONE;
     },
 
@@ -66,6 +67,40 @@ export const meetingSlice = createSlice({
         });
     },
 
+    shareFile: (state, action) => {
+        state.sharedFiles.push({
+            name: action.payload.name,
+            time: action.payload.time,
+            fileName: action.payload.fileName,
+            magnetUri: action.payload.magnetUri,
+            is_progress:false,
+            speed: 0,
+            progress: 0,
+            files: null,
+        });
+    },
+    newFile: (state, action) => {
+        state.sharedFiles.push({
+            name: action.payload.name,
+            time: action.payload.time,
+            fileName: action.payload.fileName,
+            magnetUri: action.payload.magnetUri,
+            is_progress:false,
+            speed: 0,
+            progress: 0,
+            files: null,
+        });
+    },
+    updataFileProgress: (state, action) => {
+        state.sharedFiles.forEach(file => {
+            if (file.magnetUri === action.payload.magnetUri) {
+                file.is_progress = action.payload.is_progress;
+                file.speed = action.payload.speed;
+                file.progress = action.payload.progress;
+                file.files = action.payload.files;
+            }
+        })
+    },
     produce: (state, action) => {},
 
     newProducer: (state, action) => {
@@ -213,6 +248,9 @@ export const {
     removeParticipant,
     newMessage,
     sendMessage,
+    shareFile,
+    newFile,
+    updataFileProgress,
     newProducer,
     muteMic,
     unmuteMic,

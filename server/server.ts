@@ -1,5 +1,6 @@
 import { createServer } from "http";
 import { Server, Socket } from "socket.io";
+import express from "express";
 import { signals } from "./constants/signals";
 import redis from "./lib/redis";
 import { MEETING, ONLINE_USERS, USERNAME } from "./constants/redis_keys";
@@ -22,9 +23,36 @@ let nextMediasoupWorkerIdx = 0;
 //      cert: fs.readFileSync(path.join(__dirname, config.sslCrt), 'utf-8')
 // }
 // const httpsServer = createServer(options, {});
+const app = express();
+app.use(function (req, res, next) {
+    // Add cross-domain header
+    res.header('Access-Control-Allow-Origin', '*')
+  
+    // Prevents IE and Chrome from MIME-sniffing a response. Reduces exposure to
+    // drive-by download attacks on sites serving user uploaded content.
+    res.header('X-Content-Type-Options', 'nosniff')
+  
+    // Prevent rendering of site within a frame.
+    res.header('X-Frame-Options', 'DENY')
+  
+    // Enable the XSS filter built into most recent web browsers. It's usually
+    // enabled by default anyway, so role of this headers is to re-enable for this
+    // particular website if it was disabled by the user.
+    res.header('X-XSS-Protection', '1; mode=block')
+  
+    // Force IE to use latest rendering engine or Chrome Frame
+    res.header('X-UA-Compatible', 'IE=Edge,chrome=1')
+    
+    next()
+  })
+app.get('/__rtcConfig__', (req, res) => {
+    res.send({
+        rtcConfig: config.rtcConfig
+    })
+})
 
 // start server and create workers
-const httpServer = createServer({});
+const httpServer = createServer(app);
 const io = new Server(httpServer, {
     cors: {
         origin: "*"
@@ -157,8 +185,16 @@ io.on("connection", async (socket: Socket) => {
     socket.on(signals.SEND_MESSAGE, async (meeting_id: string, message: string, message_time: string) => {
         const username = await redis.get(USERNAME(socket.id));
         console.log(`用户${socket.id}:${username}在房间${meeting_id}中发消息${message}`);
-        socket.to(meeting_id).emit(signals.MEETING_CHAT, { name: username, message, message_time });
+        socket.to(meeting_id).emit(signals.NEW_MESSAGE, { name: username, message, message_time });
     });
+
+    socket.on(signals.SHARE_FILE, async (file: any) => {
+        const username = file.name;
+        const meeting_id = file.meetingId;
+        const file_name = file.fileName;
+        console.log(`用户${socket.id}:${username}在房间${meeting_id}中发消息${file_name}`);
+        socket.to(meeting_id).emit(signals.NEW_FILE, file);
+    })
     socket.on(signals.GET_PARTICIPANTS, async (meeting_id: string, callback: (data) => any) => {
         const producers = roomsMap.get(meeting_id).getProducerListForPeer();
         console.log(`用户${socket.id}获取房间${meeting_id}中的所有参与者列表`);

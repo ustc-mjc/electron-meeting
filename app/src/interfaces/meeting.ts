@@ -4,6 +4,7 @@ export default interface Meeting {
     id: string;
     participants: Participant[];
     messages: Message[];
+    sharedFiles: ShareFile[];
 }
 
 interface SelfStatus {
@@ -11,7 +12,21 @@ interface SelfStatus {
     name: string;
     audioEnabled: boolean;
     videoEnabled: boolean;
-    screenEnabled: boolean
+    screenEnabled: boolean;
+}
+export interface ShareFile {
+    name: string;
+    time: string;
+    fileName: string;
+    magnetUri: string;
+    // 文件是否在下载中
+    is_progress: boolean;
+    // 下载进度条
+    progress: number;
+    // 下载速度 Byte
+    speed: number;
+    // 由magnet下载后得到的files
+    files: any;
 }
 
 export interface Message {
@@ -49,5 +64,6 @@ export const EmptyMeeting: Meeting = {
         audioEnabled: false,
         videoEnabled: false,
         screenEnabled: false
-    }
+    },
+    sharedFiles: []
 }
