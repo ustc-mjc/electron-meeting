@@ -49,7 +49,7 @@ class ElectronScreenShare {
 					if ((source.id as string).startsWith('screen'))
 					{
                         const constrains: Constrains = {
-                            audio : false,
+                            audio : true,
 							video :
 							{
 								mandatory:

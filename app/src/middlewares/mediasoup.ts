@@ -6,10 +6,13 @@ import { Transport, TransportOptions } from "mediasoup-client/lib/Transport";
 import { Producer } from "mediasoup-client/lib/Producer";
 import { Consumer } from "mediasoup-client/lib/Consumer";
 import { RtpCapabilities } from "mediasoup-client/lib/RtpParameters";
-import { screenOff, setParticipants, setSelfStream } from "../slices/meeting";
+import { recordOff, screenOff, setParticipants, setSelfStream } from "../slices/meeting";
 import { Participant } from "../interfaces/meeting";
 import { deviceInfo } from "../utils/deviceInfo";
 import ScreenShare from "../utils/screenShare";
+import RecordRTC, { invokeSaveAsDialog } from "recordrtc";
+import { getCurTime } from "../utils/getCurTime";
+import { show } from "../slices/toast";
 
 let sendTransport: Transport;
 let receiveTransport: Transport;
@@ -20,6 +23,7 @@ let screenProducer: Producer|null;
 
 const curDevice = deviceInfo();
 let screenShare = ScreenShare.create(curDevice);
+let recordScreenShare = ScreenShare.create(curDevice);
 
 let canProduceAudio: boolean = false;
 let canProduceVideo: boolean = false;
@@ -28,6 +32,8 @@ let canProduceScreen: boolean = false;
 let stream: MediaStream|null = null;
 let screenStream: MediaStream|null = null;
 
+let recordStream: MediaStream;
+let recorder: RecordRTC;
 
 const getMediaStream =  async (constrains: any) => {
     let stream = await navigator.mediaDevices.getUserMedia(constrains);
@@ -255,7 +261,7 @@ export const mediasoup = (socket: Socket, device: Device) => (store: any) => (ne
                     screenStream = await screenShare.start({
                         width       : { ideal: 1920 },
                         aspectRatio : 1.777, //16:9
-                        frameRate: 5
+                        frameRate: 15
                     });
                     screenProducer = await sendTransport.produce({
                         track: screenStream?.getVideoTracks()[0],
@@ -281,6 +287,36 @@ export const mediasoup = (socket: Socket, device: Device) => (store: any) => (ne
                 await closeProducer(screenProducer, socket);
                 screenProducer = null;
             }
+            break;
+        case 'meeting/recordOn':
+            // @ts-ignore
+            recordStream = await recordScreenShare.start({
+                width       : { ideal: 1920 },
+                aspectRatio : 1.777, //16:9
+                frameRate: 20
+            });
+            store.dispatch(show('start record screen!'));
+            recordStream.getTracks().forEach(track => {
+                track.onended = ()=> {
+                    store.dispatch(recordOff());
+                }
+            })
+            recorder = new RecordRTC(recordStream, {
+                type: 'video'
+            });
+            recorder.startRecording();
+            // const sleep = (m: any) => new Promise(r => setTimeout(r, m));
+            // await sleep(10000);
+            break;
+        case 'meeting/recordOff':
+            store.dispatch(show('stop record screen!'));
+            recorder.stopRecording(() => {
+                let blob = recorder.getBlob();
+                console.log(getCurTime().replaceAll(/:/g,'-'));
+                invokeSaveAsDialog(blob, 'Record-'+getCurTime().replaceAll(/[:\s]/g,'-')+'.webm');
+            });
+            // @ts-ignore
+            await recordScreenShare.stop();
             break;
         default:
             break;      

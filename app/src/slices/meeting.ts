@@ -171,6 +171,12 @@ export const meetingSlice = createSlice({
             }
         })
     },
+    recordOff: (state, action: Action) => {
+        state.recorded = false;
+    },
+    recordOn: (state, action: Action) => {
+        state.recorded = true;
+    },
     setSelfStream: (state, action: PayloadAction<any>) => {
         state.participants.forEach( participant => {
             if (participant.id === state.self.id) {
@@ -258,6 +264,8 @@ export const {
     videoOn,
     screenOff,
     screenOn,
+    recordOff,
+    recordOn,
     setSelfStream,
     pauseConsumer,
     resumeConsumer,

@@ -3,6 +3,7 @@ export default interface Meeting {
     status: MeetingStatus;
     id: string;
     participants: Participant[];
+    recorded: boolean;
     messages: Message[];
     sharedFiles: ShareFile[];
 }
@@ -56,6 +57,7 @@ export interface Participant {
 export const EmptyMeeting: Meeting = {
     status: MeetingStatus.NONE,
     id: '',
+    recorded: false,
     participants: [],
     messages: [],
     self: {
