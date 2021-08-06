@@ -1,5 +1,5 @@
 import { Action, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import Meeting, { EmptyMeeting, MeetingStatus } from '../interfaces/meeting';
+import Meeting, { EmptyMeeting, LoginInfo, MeetingStatus } from '../interfaces/meeting';
 
 const initialState: Meeting = EmptyMeeting;
 
@@ -8,6 +8,17 @@ export const meetingSlice = createSlice({
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
+    register: (state, action) => {
+
+    },
+
+    requestLogin: (state, action) => {
+    },
+    
+    loginMeeting: (state: Meeting, action: PayloadAction<LoginInfo>) => {
+        state.loginInfo = action.payload;
+    },
+
     requestToJoinMeeting: (state: Meeting, action: PayloadAction<any>) => {
         state.status = MeetingStatus.REQUEST_TO_JOIN;
         state.id = action.payload.meeting_id;
@@ -72,6 +83,7 @@ export const meetingSlice = createSlice({
             name: action.payload.name,
             time: action.payload.time,
             fileName: action.payload.fileName,
+            fileSize: action.payload.fileSize,
             magnetUri: action.payload.magnetUri,
             is_progress:false,
             speed: 0,
@@ -84,6 +96,7 @@ export const meetingSlice = createSlice({
             name: action.payload.name,
             time: action.payload.time,
             fileName: action.payload.fileName,
+            fileSize: action.payload.fileSize,
             magnetUri: action.payload.magnetUri,
             is_progress:false,
             speed: 0,
@@ -244,6 +257,9 @@ export const meetingSlice = createSlice({
 });
 
 export const {
+    register,
+    requestLogin,
+    loginMeeting,
     joinMeeting,
     leaveMeeting,
     produce,

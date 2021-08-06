@@ -49,12 +49,11 @@ class ElectronScreenShare {
 					if ((source.id as string).startsWith('screen'))
 					{
                         const constrains: Constrains = {
-                            audio : true,
-							video :
-							{
-								mandatory:
-								{
-									chromeMediaSource   : 'screen'
+                            audio: false,
+							video: {
+								mandatory: {
+									chromeMediaSource: 'desktop',
+									chromeMediaSourceId: source.id
 								}
 							}
                         }

@@ -6,6 +6,8 @@ import { Server } from "socket.io";
 import Peer from "./peer";
 import { signals } from "../constants/signals";
 const config = require("../config/config");
+import Logger from "../lib/Logger";
+const logger = new Logger('Room');
 
 export default class Room {
     readonly id: string;
@@ -87,7 +89,7 @@ export default class Room {
 
     async produce(socketId: string, producerTransportId: string, rtpParameters: RtpParameters, kind: MediaKind, appData: Object) {
         const producer = await this.peers.get(socketId).createProducer(producerTransportId, rtpParameters, kind, appData);
-        console.log(`用户${socketId}要创建producer ${producer.id}，向房间${this.id}中广播新的produce事件`);
+        logger.info(`用户${socketId}要创建producer ${producer.id}，向房间${this.id}中广播新的produce事件`);
         this.broadCast(socketId, signals.NEW_PRODUCER, {
             producer_id: producer.id,
             appData: producer.appData,
@@ -102,7 +104,7 @@ export default class Room {
         const { consumer, params } = await this.peers.get(socketId).createConsumer(consumerTransportId, producerId, appData, rtpCapabilities);
 
         consumer.on('producerclose', () => {
-            console.log(`用户${socketId}的consumer ${consumer.id}监听到producerclose事件,向房间${this.id}中广播关闭consumer${consumer.id}事件`);
+            logger.info(`用户${socketId}的consumer ${consumer.id}监听到producerclose事件,向房间${this.id}中广播关闭consumer${consumer.id}事件`);
             this.peers.get(socketId).removeConsumer(consumer.id);
             // this.io.to(socketId).emit(signals.CLOSE_CONSUMER, {
             //     consumer_id: consumer.id
@@ -110,14 +112,14 @@ export default class Room {
         });
 
         consumer.on('producerpause', () => {
-            console.log(`用户${socketId}的consumer ${consumer.id}监听到producerpause事件,向房间${this.id}中广播暂停consumer${consumer.id}事件`);
+            logger.info(`用户${socketId}的consumer ${consumer.id}监听到producerpause事件,向房间${this.id}中广播暂停consumer${consumer.id}事件`);
             // this.io.to(socketId).emit(signals.PAUSE_CONSUMER, {
             //     consumer_id: consumer.id
             // });
         });
 
         consumer.on('producerresume', () => {
-            console.log(`用户${socketId}的consumer ${consumer.id}监听到producerresume事件,向房间${this.id}中恢复consumer${consumer.id}事件`);
+            logger.info(`用户${socketId}的consumer ${consumer.id}监听到producerresume事件,向房间${this.id}中恢复consumer${consumer.id}事件`);
             // this.io.to(socketId).emit(signals.RESUME_CONSUMER, {
             //     consumer_id: consumer.id
             // });
