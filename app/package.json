@@ -1,8 +1,8 @@
 {
   "name": "meeting",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "private": true,
-  "main": "src/main.js",
+  "main": "build/electron.js",
   "license": "MIT",
   "homepage": "./",
   "repository": {
@@ -27,6 +27,7 @@
     "@types/react-dom": "^16.9.0",
     "@types/react-redux": "^7.1.7",
     "create-torrent": "^4.7.1",
+    "electron-updater": "^4.3.9",
     "file-saver": "^2.0.5",
     "mediasoup-client": "^3.6.36",
     "pretty-bytes": "^5.6.0",
@@ -49,9 +50,8 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "build-main": "tsc src/main.ts && tsc public/electron.ts",
     "build-icon": "electron-icon-builder --input=./public/icon.png --output=build-res --flatten",
-    "run-app": "electron .",
+    "app": "electron build/electron.js",
     "pack": "yarn run build && electron-builder -m",
     "publish": "yarn run build && electron-builder -mwl --publish always"
   },

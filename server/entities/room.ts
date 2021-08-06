@@ -132,6 +132,14 @@ export default class Room {
         return this.peers;
     }
 
+    dump()
+	{
+		return {
+			roomId : this.id,
+			peers  : Object.keys(this.peers).length
+		};
+	}
+
     async removePeer(socketId: string) {
         this.peers.get(socketId).close()
         this.peers.delete(socketId)
