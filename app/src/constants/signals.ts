@@ -1,4 +1,7 @@
 export enum signals {
+    REGISTER = 'meeting:register',
+    REQUEST_LOGIN = 'meeting:request_login',
+    LOGIN_MEETING = 'meeting:login',
     SET_USERNAME = 'users:set_name',
     JOIN_MEETING = 'meeting:join',
     LEAVE_MEETING = 'meeting:leave',

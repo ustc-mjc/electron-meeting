@@ -9,14 +9,18 @@
   },
   "homepage": "https://github.com/ustc-mjc/electron-meeting",
   "scripts": {
-    "start": "nodemon server.ts",
+    "start": "DEBUG=${DEBUG:='*mediasoup* *INFO* *WARN* *ERROR*'} nodemon server.ts",
     "build": "tsc --project ./",
+    "connect": "nodemon connect.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "colors": "^1.4.0",
+    "debug": "^4.3.2",
     "express": "^4.17.1",
     "ioredis": "^4.27.6",
     "mediasoup": "^3.7.19",
+    "pidusage": "^2.0.21",
     "socket.io": "^4.1.3"
   },
   "devDependencies": {

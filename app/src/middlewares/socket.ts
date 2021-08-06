@@ -10,7 +10,8 @@ import {
     resumeConsumer,
     pauseConsumer,
     closeConsumer,
-    newFile
+    newFile,
+    loginMeeting
 } from '../slices/meeting';
 import { show } from "../slices/toast";
 
@@ -18,6 +19,18 @@ const emitEventMiddleWare = (socket: Socket) => (store: any) => (next: any) => (
     console.log(`欢迎进入socket io 中间件,我是被action: ${action.type}触发的`);
     const { dispatch } = store;
     switch (action.type) {
+        case 'meeting/register':
+            socket.emit(signals.REGISTER, action.payload, (registerState: boolean) => {
+                if(registerState) {
+                    dispatch(show('register success!'));
+                }
+            });
+            break;
+        case 'meeting/requestLogin':
+            socket.emit(signals.REQUEST_LOGIN, action.payload, (loginState: boolean) => {
+                dispatch(loginMeeting({...action.payload, loginState}));
+            })
+            break;
         case 'meeting/requestToJoinMeeting':
             socket.emit(signals.REQUEST_JOIN, action.payload.meeting_id, action.payload.name, (response: any) => {
                 dispatch(joinMeeting({id: socket.id, name: action.payload.name}));

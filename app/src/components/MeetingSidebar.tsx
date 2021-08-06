@@ -212,8 +212,8 @@ const MeetingSidebar = ({isMobile, isOpen, toggleSidebar, tab='participants'}: {
                                         <div className="flex p-2 items-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
                                             <div className="text-xl text-green-600 ml-2">{file.fileName}</div>
-                        
-                                            <button onClick={() => onDownload(file.magnetUri)}>
+                                            <div className="text-sm ml-2 mt-1">{file.fileSize}</div>
+                                            <button className="mt-1" onClick={() => onDownload(file.magnetUri)}>
                                                 <svg className="ml-2" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
                                             </button>
 

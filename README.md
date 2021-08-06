@@ -27,7 +27,7 @@
 <hr>
 
 ## client-side
-> client-side use [mediasoup-client](https://www.npmjs.com/package/mediasoup-client)lib and [socket.io-client](https://www.npmjs.com/package/socket.io-client), use create-react-app typescript template and electron.
+> client-side use [mediasoup-client](https://www.npmjs.com/package/mediasoup-client) lib and [socket.io-client](https://www.npmjs.com/package/socket.io-client), use create-react-app typescript template and electron.
 
 ### local dev:
 
@@ -37,7 +37,8 @@
 
 <hr>
 
-## in the future, what need to do
-1. add register and login function
-2. add file upload and download function, -- finished!
-3. add media setting function
+## in the future, what needs to do:
+
+- [x] add register and login function
+- [x] add file upload and download function
+- [ ] add media setting function

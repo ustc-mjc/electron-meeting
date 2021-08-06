@@ -1,4 +1,5 @@
 export default interface Meeting {
+    loginInfo: LoginInfo;
     self: SelfStatus;
     status: MeetingStatus;
     id: string;
@@ -6,6 +7,12 @@ export default interface Meeting {
     recorded: boolean;
     messages: Message[];
     sharedFiles: ShareFile[];
+}
+
+export interface LoginInfo {
+    username: string;
+    password: string;
+    loginState: boolean;
 }
 
 interface SelfStatus {
@@ -19,6 +26,7 @@ export interface ShareFile {
     name: string;
     time: string;
     fileName: string;
+    fileSize: string;
     magnetUri: string;
     // 文件是否在下载中
     is_progress: boolean;
@@ -55,6 +63,7 @@ export interface Participant {
 }
 
 export const EmptyMeeting: Meeting = {
+    loginInfo: {username:'', password: '', loginState: false},
     status: MeetingStatus.NONE,
     id: '',
     recorded: false,

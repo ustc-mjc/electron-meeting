@@ -2,6 +2,8 @@ import { DtlsParameters, WebRtcTransport } from "mediasoup/lib/WebRtcTransport";
 import { Consumer } from "mediasoup/lib/Consumer";
 import { Producer } from "mediasoup/lib/Producer";
 import { MediaKind, RtpCapabilities, RtpParameters } from "mediasoup/lib/RtpParameters";
+import Logger from "../lib/Logger";
+const logger = new Logger('Peer');
 
 export default class Peer {
     readonly id;
@@ -29,16 +31,16 @@ export default class Peer {
     }
 
     async createProducer(producerTransportId: string, rtpParameters: RtpParameters, kind: MediaKind, appData: Object) {
-        console.log(`调用Peer中的创建Producer函数，appData为 ${appData}`);
+        logger.info(`调用Peer中的创建Producer函数，appData为 ${appData}`);
         const producer = await this.transports.get(producerTransportId).produce({
             kind: kind,
             rtpParameters: rtpParameters,
             appData: appData
         });
-        console.log(producer.appData);
+        logger.info(producer.appData);
         this.producers.set(producer.id, producer);
         producer.on('transportclose', () => {
-            console.log(`用户${this.id}:${this.name}的producer收到transportclose事件,开始关闭producer${producer.id}`);
+            logger.info(`用户${this.id}:${this.name}的producer收到transportclose事件,开始关闭producer${producer.id}`);
             producer.close();
             this.producers.delete(producer.id);
         });
@@ -55,7 +57,7 @@ export default class Peer {
         this.consumers.set(consumer.id, consumer);
 
         consumer.on('transportclose', () => {
-            console.log(`用户${this.id}:${this.name}的consumer收到transportclose事件,开始关闭consumer${consumer.id}`);
+            logger.info(`用户${this.id}:${this.name}的consumer收到transportclose事件,开始关闭consumer${consumer.id}`);
             consumer.close();
             this.consumers.delete(consumer.id);
         });
@@ -110,4 +112,15 @@ export default class Peer {
     removeConsumer(consumerId: string) {
         this.consumers.delete(consumerId);
     }
+
+    get peerInfo()
+	{
+		const peerInfo =
+		{
+			id                  : this.id,
+			name                : this.name
+		};
+
+		return peerInfo;
+	}
 }

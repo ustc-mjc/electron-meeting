@@ -6,6 +6,7 @@ import { shareFile } from "../slices/meeting";
 import { getCurTime } from "../utils/getCurTime";
 import Webtorrent from "../utils/webtorrent";
 import { show } from "../slices/toast";
+import prettyBytes from "pretty-bytes";
 
 const getMeetingSelf = (state: RootState) => state.meeting.self;
 const getMeetingId = (state: RootState) => state.meeting.id;
@@ -14,10 +15,9 @@ const DragDrop = ({webtorrent}: {webtorrent: Webtorrent}) => {
   const self = useSelector(getMeetingSelf);
   const meetingId = useSelector(getMeetingId);
   const dispatch = useDispatch();
-  const [file, setFile] = useState(null);
-  const handleChange = (file: any) => {
+  const [file, setFile] = useState<File>();
+  const handleChange = (file: File) => {
     setFile(file);
-    console.log(file);
     const torrent = webtorrent.createTorrent(file);
     // 存在 torrent 不用seed, 直接dispatch
     const existingTorrent = webtorrent.getClient().get(torrent);
@@ -28,6 +28,7 @@ const DragDrop = ({webtorrent}: {webtorrent: Webtorrent}) => {
         name: self.name,
         time: getCurTime(),
         fileName: file.name,
+        fileSize: prettyBytes(file.size),
         magnetUri: existingTorrent.magnetURI
       }))
     } else {
@@ -40,6 +41,7 @@ const DragDrop = ({webtorrent}: {webtorrent: Webtorrent}) => {
           name: self.name,
           time: getCurTime(),
           fileName: file.name,
+          fileSize: prettyBytes(file.size),
           magnetUri: newTorrent.magnetURI
         }))
       })

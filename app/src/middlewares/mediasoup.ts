@@ -318,6 +318,18 @@ export const mediasoup = (socket: Socket, device: Device) => (store: any) => (ne
             // @ts-ignore
             await recordScreenShare.stop();
             break;
+        case 'meeting/leaveMeeting':
+            if (recorder) {
+                store.dispatch(show('stop record screen!'));
+                recorder.stopRecording(() => {
+                    let blob = recorder.getBlob();
+                    console.log(getCurTime().replaceAll(/:/g,'-'));
+                    invokeSaveAsDialog(blob, 'Record-'+getCurTime().replaceAll(/[:\s]/g,'-')+'.webm');
+                });
+                // @ts-ignore
+                await recordScreenShare.stop();
+            }
+            break;
         default:
             break;      
     }
