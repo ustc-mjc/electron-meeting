@@ -12,6 +12,7 @@
     "start": "DEBUG=${DEBUG:='*mediasoup* *INFO* *WARN* *ERROR*'} nodemon server.ts",
     "build": "tsc --project ./",
     "connect": "nodemon connect.ts",
+    "pm2": "yarn run build && pm2 start server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {

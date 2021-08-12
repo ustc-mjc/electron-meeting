@@ -3,10 +3,10 @@
 # server gitignore
 server/node_modules
 server/build
+server/config
+*.js
 *.js.map
-
-!/server/config/*
-!/server/config/ssl/*
+!server/config/*
 
 # app gitignore
 

@@ -1,4 +1,6 @@
-import { createServer } from "http";
+import { createServer } from "https";
+import * as fs from "fs";
+import * as path from "path";
 import { Server, Socket } from "socket.io";
 import express from "express";
 import { signals } from "./constants/signals";
@@ -72,14 +74,23 @@ app.get('/__rtcConfig__', (req, res) => {
 app.use(express.static('build'));
 
 // start server and create workers
-const httpServer = createServer(app);
-const io = new Server(httpServer, {
+// const httpServer = createServer(app);
+// const io = new Server(httpServer, {
+const options = {
+     key: fs.readFileSync(path.join(__dirname, config.sslKey), 'utf-8'),
+     cert: fs.readFileSync(path.join(__dirname, config.sslCrt), 'utf-8')
+}
+const httpsServer = createServer(options, app);
+
+// start server and create workers
+// const httpServer = createServer({});
+const io = new Server(httpsServer, {
     cors: {
         origin: "*"
     }
 });
 
-httpServer.listen(config.listenPort, async () => {
+httpsServer.listen(config.listenPort, async () => {
     // create workers
     await createWorkers();
     logger.info(`Server is listening at ${config.listenPort}`);

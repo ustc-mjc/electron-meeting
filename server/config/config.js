@@ -1,10 +1,10 @@
-const os = require('os')
+const os = require('os');
 
 module.exports = {
     listenIp: '0.0.0.0',
-    listenPort: 3333,
-    sslCrt: './ssl/cert.pem',
-    sslKey: './ssl/key.pem',
+    listenPort: 8888,
+    sslCrt:  './config/ssl/hellomjc.cn.crt',
+    sslKey:  './config/ssl/hellomjc.cn.key',
     rtcConfig: {
         iceServers: [
             // public turn server
@@ -121,7 +121,7 @@ module.exports = {
             listenIps: [
                 {
                     ip: '0.0.0.0',
-                    announcedIp: '127.0.0.1' // replace by public IP address
+                    announcedIp: '124.71.173.185' // replace by public IP address
                 }
             ],
             minimumAvailableOutgoingBitrate: 600000,
@@ -133,8 +133,8 @@ module.exports = {
             {
                 listenIp:
                     {
-                        ip: process.env.MEDIASOUP_LISTEN_IP || '0.0.0.0',
-                        announcedIp: process.env.MEDIASOUP_ANNOUNCED_IP|| '127.0.0.1'
+                        ip: process.env.MEDIASOUP_LISTEN_IP || '124.71.173.185',
+                        announcedIp: process.env.MEDIASOUP_ANNOUNCED_IP|| '124.71.173.185'
                     },
                 maxSctpMessageSize: 262144
             }

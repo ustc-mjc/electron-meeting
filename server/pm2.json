@@ -1,0 +1,16 @@
+{
+    "apps": [
+        {
+            "name": "meeting-server",
+            "script": "./node_modules/.bin/ts-node",
+            "args": "-r ./node_modules/tsconfig-paths/register ./server.ts",
+            "watch": true,
+            "ignore_watch":["uploads","downloads"],
+            "instances": "2",
+            "exec_mode": "cluster",
+            "env": {
+                "production": true
+            }
+        }
+    ]
+}
