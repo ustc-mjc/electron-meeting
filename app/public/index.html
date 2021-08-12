@@ -42,11 +42,15 @@
     -->
     <div id="notification" class="hidden">
       <p id="message"></p>
+      <div>
+        <progress class="hidden" id="progress" max="100" value="10"></progress>
+        <span class="hidden" id="percent"></span>
+      </div>
       <button id="close-button" onClick="closeNotification()">
-        Close
+        close
       </button>
       <button id="restart-button" onClick="restartApp()" class="hidden">
-        Restart
+        restart
       </button>
     </div>
     <script src="./renderer/autoUpdate.js"></script>

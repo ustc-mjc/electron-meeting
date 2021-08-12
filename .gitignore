@@ -2,8 +2,7 @@
 
 # server gitignore
 server/node_modules
-
-*.js
+server/build
 *.js.map
 
 !/server/config/*
@@ -32,9 +31,6 @@ app/.env.production.local
 app/npm-debug.log*
 app/yarn-debug.log*
 app/yarn-error.log*
-
-# ts to js
-app/*.js
 
 # build-res
 app/build-res

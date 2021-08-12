@@ -69,6 +69,7 @@ app.get('/__rtcConfig__', (req, res) => {
         rtcConfig: config.rtcConfig
     })
 })
+app.use(express.static('build'));
 
 // start server and create workers
 const httpServer = createServer(app);
