@@ -88,6 +88,7 @@ export default class Room {
     }
 
     async produce(socketId: string, producerTransportId: string, rtpParameters: RtpParameters, kind: MediaKind, appData: Object) {
+        // logger.info(`producer rtpParameters is ${JSON.stringify(rtpParameters)}`);
         const producer = await this.peers.get(socketId).createProducer(producerTransportId, rtpParameters, kind, appData);
         logger.info(`用户${socketId}要创建producer ${producer.id}，向房间${this.id}中广播新的produce事件`);
         this.broadCast(socketId, signals.NEW_PRODUCER, {
@@ -100,9 +101,11 @@ export default class Room {
     }
 
     async consume(socketId: string, consumerTransportId: string, producerId: string, appData: Object, rtpCapabilities: RtpCapabilities) {
-        if (!this.router.canConsume({ producerId: producerId, rtpCapabilities })) return;
+        if (!this.router.canConsume({ producerId: producerId, rtpCapabilities })) {
+            // logger.error(`consumer rtpCapabilities is ${JSON.stringify(rtpCapabilities)}`);
+            logger.error(`${socketId} can not create consumer`); 
+            return;};
         const { consumer, params } = await this.peers.get(socketId).createConsumer(consumerTransportId, producerId, appData, rtpCapabilities);
-
         consumer.on('producerclose', () => {
             logger.info(`用户${socketId}的consumer ${consumer.id}监听到producerclose事件,向房间${this.id}中广播关闭consumer${consumer.id}事件`);
             this.peers.get(socketId).removeConsumer(consumer.id);

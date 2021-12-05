@@ -14,7 +14,7 @@ const reducer = {
 
 // "https://hellomjc.top:8888"
 const device = new Device();
-const address = process.env.SOCKET_ADDRESS || "http://127.0.0.1:3333";
+const address = process.env.SOCKET_ADDRESS || "http://127.0.0.1:8888";
 console.log(process.env.SOCKET_ADDRESS);
 
 const socket = io(address);

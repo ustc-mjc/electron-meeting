@@ -168,7 +168,7 @@ const NewMeeting = () => {
                             type="text"
                             placeholder="Enter your name"
                         />
-                        <button className="w-full bg-green-500 rounded p-2" onClick={startMeeting}>
+                        <button id="startMeeting" className="w-full bg-green-500 rounded p-2" onClick={startMeeting}>
                             {
                                 meeting.status === MeetingStatus.REQUEST_TO_JOIN ? 'Joining Meeting' : 'Start and Join Meeting'
                             }

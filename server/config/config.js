@@ -2,7 +2,7 @@ const os = require('os')
 
 module.exports = {
     listenIp: '0.0.0.0',
-    listenPort: 3333,
+    listenPort: 8888,
     sslCrt: './ssl/cert.pem',
     sslKey: './ssl/key.pem',
     rtcConfig: {
@@ -121,7 +121,7 @@ module.exports = {
             listenIps: [
                 {
                     ip: '0.0.0.0',
-                    announcedIp: '127.0.0.1' // replace by public IP address
+                    announcedIp: '192.168.43.246' // replace by public IP address
                 }
             ],
             minimumAvailableOutgoingBitrate: 600000,
@@ -134,7 +134,7 @@ module.exports = {
                 listenIp:
                     {
                         ip: process.env.MEDIASOUP_LISTEN_IP || '0.0.0.0',
-                        announcedIp: process.env.MEDIASOUP_ANNOUNCED_IP|| '127.0.0.1'
+                        announcedIp: process.env.MEDIASOUP_ANNOUNCED_IP|| '192.168.43.246'
                     },
                 maxSctpMessageSize: 262144
             }

@@ -134,9 +134,9 @@ const MeetingSidebar = ({isMobile, isOpen, toggleSidebar, tab='participants'}: {
                             </button> }
             
             <div className="flex bg-gray-200 font-mono">
-                <button className={`flex-1 p-3 ${activeTab === 'participants' ? 'border-b-2 border-green-600 text-green-600': ''} focus:outline-none`} onClick={() => setActiveTab('participants')}>Participants <div className="text-red-400 inline-block">{participants.length}</div></button>
-                <button className={`flex-1 p-3 ${activeTab === 'chat' ? 'border-b-2 border-green-600 text-green-600': ''} focus:outline-none`} onClick={() => setActiveTab('chat')}>Chat <div className="text-red-400 inline-block">{messages.length}</div></button>
-                <button className={`flex-1 p-3 ${activeTab === 'fileShare' ? 'border-b-2 border-green-600 text-green-600' : ''} focus:outline-none`} onClick={() => setActiveTab('fileShare')}>FileShare <div className="text-red-400 inline-block">{sharedFiles.length}</div></button>
+                <button id="participants" className={`flex-1 p-3 ${activeTab === 'participants' ? 'border-b-2 border-green-600 text-green-600': ''} focus:outline-none`} onClick={() => setActiveTab('participants')}>Participants <div className="text-red-400 inline-block">{participants.length}</div></button>
+                <button id="chat" className={`flex-1 p-3 ${activeTab === 'chat' ? 'border-b-2 border-green-600 text-green-600': ''} focus:outline-none`} onClick={() => setActiveTab('chat')}>Chat <div className="text-red-400 inline-block">{messages.length}</div></button>
+                <button id="fileShare" className={`flex-1 p-3 ${activeTab === 'fileShare' ? 'border-b-2 border-green-600 text-green-600' : ''} focus:outline-none`} onClick={() => setActiveTab('fileShare')}>FileShare <div className="text-red-400 inline-block">{sharedFiles.length}</div></button>
             </div>
             { activeTab === 'fileShare' && (
                 <div className="mt-2"><DragDrop webtorrent={webtorrent}/></div>
@@ -213,7 +213,7 @@ const MeetingSidebar = ({isMobile, isOpen, toggleSidebar, tab='participants'}: {
                                             <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
                                             <div className="text-xl text-green-600 ml-2">{file.fileName}</div>
                                             <div className="text-sm ml-2 mt-1">{file.fileSize}</div>
-                                            <button className="mt-1" onClick={() => onDownload(file.magnetUri)}>
+                                            <button id={`downloadFile${index}`} className="mt-1" onClick={() => onDownload(file.magnetUri)}>
                                                 <svg className="ml-2" xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
                                             </button>
 
@@ -223,7 +223,7 @@ const MeetingSidebar = ({isMobile, isOpen, toggleSidebar, tab='participants'}: {
                                             </div>)}
                                             {
                                                 file.is_progress && file.progress === 1 && (
-                                                    <button className="ml-1" onClick={()=> saveFile(file.files[0])}>
+                                                    <button id={`saveFile${index}`} className="ml-1" onClick={()=> saveFile(file.files[0])}>
                                                         <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
                                                     </button>
                                                 )
@@ -243,7 +243,7 @@ const MeetingSidebar = ({isMobile, isOpen, toggleSidebar, tab='participants'}: {
             {
                 activeTab === 'chat' && (
                     <div className="flex flex-row bg-white p-4">
-                        <input type="text" placeholder="Enter your message here" className="flex-1 flex-shrink focus:outline-none border-2 border-green-500"
+                        <input id="messageInput" type="text" placeholder="Enter your message here" className="flex-1 flex-shrink focus:outline-none border-2 border-green-500"
                                value={message}
                                onChange={onMessageChange}
                                onKeyDown={(event) => {
@@ -252,7 +252,7 @@ const MeetingSidebar = ({isMobile, isOpen, toggleSidebar, tab='participants'}: {
                                    }
                                }}
                         />
-                        <button onClick={send}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <button id="sendMessage" onClick={send}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M2.01 21L23 12L2.01 3L2 10L17 12L2 14L2.01 21Z" fill="#059669"/>
                             </svg>
                         </button>

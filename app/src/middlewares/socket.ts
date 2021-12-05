@@ -87,8 +87,9 @@ const listeners = [
     },
     {
         name: signals.PARTICIPANT_OFFLINE,
-        callback: (dispatch: Dispatch<any>, participantId: string) => {
+        callback: (dispatch: Dispatch<any>, participantId: string, name: string) => {
             dispatch(removeParticipant(participantId));
+            dispatch(show(`${name} leave meeting!`))
         }
     }, {
         name: signals.NEW_PARTICIPANT,

@@ -9,8 +9,9 @@
   },
   "homepage": "https://github.com/ustc-mjc/electron-meeting",
   "scripts": {
-    "start": "DEBUG=${DEBUG:='*mediasoup* *INFO* *WARN* *ERROR*'} nodemon server.ts",
+    "start": "DEBUG=${DEBUG:='*INFO* *WARN* *ERROR*'} nodemon server.ts",
     "build": "tsc --project ./",
+    "pm2": "yarn run build && pm2 start server.js",
     "connect": "nodemon connect.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -31,7 +31,7 @@ export default class Peer {
     }
 
     async createProducer(producerTransportId: string, rtpParameters: RtpParameters, kind: MediaKind, appData: Object) {
-        logger.info(`调用Peer中的创建Producer函数，appData为 ${appData}`);
+        logger.info(`调用Peer中的创建Producer函数，appData为 ${JSON.stringify(appData)}`);
         const producer = await this.transports.get(producerTransportId).produce({
             kind: kind,
             rtpParameters: rtpParameters,

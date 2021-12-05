@@ -92,20 +92,23 @@ io.on("connection", async (socket: Socket) => {
         const { rooms } = socket;
         rooms.forEach( async room => {
             await redis.srem(MEETING(room), socket.id);
-            if (roomsMap.has(room)) {
+            if (room && roomsMap.has(room)) {
                 await roomsMap.get(room).removePeer(socket.id);
             }
         });
         await redis.srem(ONLINE_USERS, socket.id);
     });
-    socket.on(signals.REGISTER, async(registerInfo: any, callback: (data: any) => any) => {
+    socket.on(signals.REGISTER, async (registerInfo: any, callback: (data: any) => any) => {
+        logger.info(`${socket.id} 请求注册用户名：${registerInfo.username}`);
         await redis.hset(MEETING_USERS, registerInfo.username, registerInfo.password);
         callback(true);
     });
     socket.on(signals.REQUEST_LOGIN, async (loginInfo: any, callback: (data: boolean) => any) => {
+        logger.info(`${socket.id} 请求登录, username: ${loginInfo.username}`);
         let password = await redis.hget(MEETING_USERS, loginInfo.username);
         if (password && password === loginInfo.password) {
             callback(true);
+            logger.info(`${socket.id} 登录成功, username: ${loginInfo.username}`);
         } else {
             callback(false);
         }
@@ -253,8 +256,9 @@ io.of("/").adapter.on("join-room", async (room, socketId) => {
 });
 
 // 监听socket.leave()
-io.of("/").adapter.on("leave-room", (room, socketId) => {
-    io.to(room).emit(signals.PARTICIPANT_OFFLINE, socketId);
+io.of("/").adapter.on("leave-room", async (room, socketId) => {
+    const name = await redis.get(USERNAME(socketId));
+    io.to(room).emit(signals.PARTICIPANT_OFFLINE, socketId, name);
     logger.info(`对房间内广播有人离开(参与者下线)${socketId}`);
 });
 

@@ -5,6 +5,7 @@ server/node_modules
 server/build
 *.js.map
 
+server/**/*.js
 !/server/config/*
 !/server/config/ssl/*
 

@@ -42,7 +42,7 @@ export default class Webtorrent {
     }
     getRtcConfig() {
         get.concat({
-            url: process.env.GET_RTC_CONFIG || "http://127.0.0.1:3333/__rtcConfig__",
+            url: process.env.GET_RTC_CONFIG || "http://127.0.0.1:8888/__rtcConfig__",
             timeout: 5000
           }, function (err: any, res: any, data: any) {
             if (err || res.statusCode !== 200) {
@@ -103,7 +103,5 @@ export default class Webtorrent {
         console.log('Torrent magnetURI: ' + torrent.magnetURI);
         console.log('Torrent torrentFileBlobURL: ' + torrent.torrentFileBlobURL);
         console.log('Torrent files: ' + torrent.files);
-        
-
     }  
 }
